@@ -1,4 +1,4 @@
-MonsterFleet
+﻿MonsterFleet
     name = "SM_KRILL_1"
     ships = [
         "SM_KRILL_1"

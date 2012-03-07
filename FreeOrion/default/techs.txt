@@ -1,4 +1,4 @@
-Category 
+﻿Category 
     name = "LEARNING_CATEGORY"
     graphic = "learning.png"
     colour = (54, 202, 229)

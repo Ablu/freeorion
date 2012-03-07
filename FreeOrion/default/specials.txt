@@ -1,4 +1,4 @@
-Special
+﻿Special
     name = "ECCENTRIC_ORBIT_SPECIAL"
     description = "ECCENTRIC_ORBIT_SPECIAL_DESC"
     spawnrate = 1.0

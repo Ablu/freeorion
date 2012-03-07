@@ -1,4 +1,4 @@
-ShipDesign
+﻿ShipDesign
     name = "SM_KRILL_1"
     description = "SM_KRILL_1_DESC"
     hull = "SH_KRILL_1_BODY"

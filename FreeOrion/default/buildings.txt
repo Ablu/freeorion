@@ -1,4 +1,4 @@
-﻿
+
 BuildingType
     name = "BLD_CULTURE_ARCHIVES"
     description = "BLD_CULTURE_ARCHIVES_DESC"

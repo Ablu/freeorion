@@ -1,4 +1,4 @@
-﻿ShipDesign
+ShipDesign
     name = "SM_KRILL_1"
     description = "SM_KRILL_1_DESC"
     hull = "SH_KRILL_1_BODY"
@@ -225,7 +225,7 @@ ShipDesign
         ]
     icon = "icons/monsters/juggernaut-1.png"
     model = "seed"
-        
+
 ShipDesign
     name = "SM_JUGGERNAUT_2"
     description = "SM_JUGGERNAUT_2_DESC"

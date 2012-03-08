@@ -1,4 +1,4 @@
-﻿English
+English
 
 #This is the English String Table file for FreeOrion
 #Translate this file to other languages.
@@ -3270,6 +3270,7 @@ VOID_SPECIAL
 Void Metamorphisis
 VOID_SPECIAL_DESC
 This planet exists partially in this universe and partially in the void, increasing its stealth by 700.  If the planet is owned by any empire, that empire's technological bonuses and the bonuses of the inhabiting species will be used instead of this bonus.
+
 
 #######################
 # Enumeration  values #

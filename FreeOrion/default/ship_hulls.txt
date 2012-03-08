@@ -1,4 +1,4 @@
-﻿Hull
+Hull
     name = "SH_XENTRONIUM"
     description = "SH_XENTRONIUM_DESC"
     speed = 50

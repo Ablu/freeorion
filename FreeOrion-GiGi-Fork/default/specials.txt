@@ -1,0 +1,1363 @@
+include "shared_macros.txt"
+
+Special
+    name = "ECCENTRIC_ORBIT_SPECIAL"
+    description = "ECCENTRIC_ORBIT_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Capital
+        Not Planet type = [Asteroids GasGiant]
+    ]
+    effectsgroups =
+        EffectsGroup
+            scope = Source
+            activation = Source
+            effects = [
+                SetTargetResearch Value + .3 * [[BASIC_PRODUCTION]]
+                SetTargetConstruction Value - 20
+            ]
+    graphic = "icons/specials_huge/eccentric_orbit.png"
+
+Special
+    name = "TIDAL_LOCK_SPECIAL"
+    description = "TIDAL_LOCK_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Capital
+        Not Planet type = [Asteroids GasGiant]
+    ]
+    effectsgroups = [
+        EffectsGroup
+            scope = Source
+            activation = [[STANDARD_CONDITION_INFRA]]
+            effects = [
+                SetTargetConstruction Value - 20
+                SetTargetIndustry Value + Target.Construction * 0.4 * [[PRODUCTION_PER_INFRA]]
+            ]
+
+        EffectsGroup
+            scope = Source
+            activation = [[STANDARD_CONDITION_POP]]
+            effects = [
+                SetTargetConstruction Value - 20
+                SetTargetIndustry Value + Target.Population * 0.4 * [[PRODUCTION_PER_POP]]
+            ]
+    ]
+    graphic = "icons/specials_huge/tidal_lock.png"
+
+Special
+    name = "SLOW_ROTATION_SPECIAL"
+    description = "SLOW_ROTATION_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Capital
+        Not Planet type = [Asteroids GasGiant]
+    ]
+    effectsgroups = [
+        EffectsGroup
+            scope = Source
+            activation = Not OwnerHasTech "GRO_ORBIT_FARMING"
+            effects = SetTargetPopulation Value - 1 * Target.SizeAsDouble
+        EffectsGroup
+            scope = Source
+            activation = Source
+            effects = SetTargetConstruction Value - 20
+    ]
+    graphic = "icons/specials_huge/slow_rotation.png"
+
+Special
+    name = "HIGH_AXIAL_TILT_SPECIAL"
+    description = "HIGH_AXIAL_TILT_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Capital
+        Not Planet type = [Asteroids GasGiant]
+    ]
+    effectsgroups = EffectsGroup
+        scope = Source
+        activation = Source
+        effects = SetTargetConstruction Value - 20
+    graphic = "icons/specials_huge/high_axial_tilt.png"
+
+Special
+    name = "SOLID_CORE_SPECIAL"
+    description = "SOLID_CORE_SPECIAL_DESC"
+    stealth = 20
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Capital
+        Not Planet type = [Asteroids GasGiant]
+    ]
+    effectsgroups = EffectsGroup
+        scope = Source
+        activation = Source
+        effects = SetTargetPopulation Value - 1 * Target.SizeAsDouble
+    graphic = "icons/specials_huge/solid_core.png"
+
+Special
+    name = "TECTONIC_INSTABILITY_SPECIAL"
+    description = "TECTONIC_INSTABILITY_SPECIAL_DESC"
+    stealth = 20
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Capital
+        Not Planet type = [Asteroids GasGiant]
+    ]
+    effectsgroups = EffectsGroup
+        scope = Source
+        activation = Source
+        effects = SetTargetConstruction Value - 20
+    graphic = "icons/specials_huge/tectonic_instability.png"
+
+Special
+    name = "ANCIENT_RUINS_SPECIAL"
+    description = "ANCIENT_RUINS_SPECIAL_DESCRIPTION"
+    stealth = 20
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Planet type = [Asteroids GasGiant]
+        Not ContainedBy Contains Capital
+    ]
+    effectsgroups = [
+        EffectsGroup
+            scope = Source
+            effects = SetTexture name = "planets/overlays/ruins.png"
+            
+        EffectsGroup     
+            scope = Source     
+            activation = AND [
+                Turn high = 0
+                Random probability = 0.66
+                Not WithinStarlaneJumps 1 Contains And [
+                    Planet
+                    OwnedBy AnyEmpire
+                ]
+            ]
+            effects = CreateShip "SM_GUARD_2"
+    
+        EffectsGroup
+            scope = Source
+            activation = And [
+                Random probability = .2
+                OwnerHasTech "LRN_XENOARCH"
+            ]
+            stackinggroup = "ANCIENT_RUINS_TECH_UNLOCK"
+            effects = [
+                CreateShip "SD_DRAGON_TOOTH" Source.Owner Source.Species
+                GenerateSitRepMessage
+                    message = "EFFECT_ANCIENT_SHIP"
+                    parameters = [
+                        tag = "planet" data = Source.ID
+                        tag = "predefinedshipdesign" data = "SD_DRAGON_TOOTH"
+                    ]
+                    empire = Source.Owner
+            ]
+
+        EffectsGroup
+            scope = Source
+            activation = And [
+                Random probability = .25
+                OwnerHasTech "LRN_XENOARCH"
+            ]
+            stackinggroup = "ANCIENT_RUINS_TECH_UNLOCK"
+            effects = [
+                CreateBuilding name = "BLD_NEUTRONIUM_SYNTH"
+                GenerateSitRepMessage
+                    message = "EFFECT_ANCIENT_BUILDING"
+                    parameters = [
+                        tag = "planet" data = Source.ID
+                        tag = "buildingtype" data = "BLD_NEUTRONIUM_SYNTH"
+                    ]
+                    empire = Source.Owner
+            ]
+
+        EffectsGroup
+            scope = Source
+            activation = And [
+                Random probability = .50
+                NotOwnerHasTech "SHP_DEATH_RAY"
+                OwnerHasTech "LRN_XENOARCH"
+            ]
+            stackinggroup = "ANCIENT_RUINS_TECH_UNLOCK"
+            effects = [
+                GiveEmpireTech "SHP_DEATH_RAY" empire = Target.Owner
+                GenerateSitRepMessage
+                    message = "EFFECT_ANCIENT_TECH"
+                    parameters = [
+                        tag = "planet" data = Source.ID
+                        tag = "tech" data = "SHP_DEATH_RAY"
+                    ]
+                    empire = Source.Owner
+            ]
+
+        EffectsGroup
+            scope = Source
+            activation = And [
+                Not OwnerHasTech "SHP_MULTISPEC_SHIELD"
+                OwnerHasTech "LRN_XENOARCH"
+            ]
+            stackinggroup = "ANCIENT_RUINS_TECH_UNLOCK"
+            effects = [
+                GiveEmpireTech "SHP_MULTISPEC_SHIELD" empire = Target.Owner
+                GenerateSitRepMessage
+                    message = "EFFECT_ANCIENT_TECH"
+                    parameters = [
+                        tag = "planet" data = Source.ID
+                        tag = "tech" data = "SHP_MULTISPEC_SHIELD"
+                    ]
+                    empire = Source.Owner
+            ]
+
+        EffectsGroup
+            scope = Source
+            activation = OwnerHasTech "LRN_XENOARCH"
+            effects = [
+                AddSpecial "ANCIENT_RUINS_DEPLETED_SPECIAL"
+                RemoveSpecial "ANCIENT_RUINS_SPECIAL"
+            ]
+    ]
+    graphic = "icons/specials_huge/ancient_ruins.png"
+
+Special
+    name = "TUNNELS_SPECIAL"
+    description = "TUNNELS_SPECIAL_DESCRIPTION"
+    stealth = 30
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Capital
+        Not Planet type = [Asteroids GasGiant]
+    ]
+    effectsgroups =
+        EffectsGroup
+            scope = Source
+            effects = SetTargetConstruction Value + 10
+    graphic = "icons/specials_huge/tunnels.png"
+
+Special
+    name = "RESONANT_MOON_SPECIAL"
+    description = "RESONANT_MOON_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Capital
+        Not Planet type = [Asteroids GasGiant]
+    ]
+    graphic = "icons/specials_huge/resonant_moon.png"
+
+Special
+    name = "COMPUTRONIUM_SPECIAL"
+    description = "COMPUTRONIUM_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 1.0
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Planet type = [Asteroids GasGiant]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 2 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [
+        EffectsGroup
+            scope = And [
+                Planet
+                Focus "FOCUS_RESEARCH"
+                OwnedBy TheEmpire Source.Owner
+                [[STANDARD_CONDITION_INFRA]]
+            ]
+            activation = Focus "FOCUS_RESEARCH"
+            stackinggroup = "COMPUTRONIUM_STACK"
+            effects = SetTargetResearch Value + Target.Construction * [[PRODUCTION_PER_INFRA]]
+
+        EffectsGroup
+            scope = And [
+                Planet
+                Focus "FOCUS_RESEARCH"
+                OwnedBy TheEmpire Source.Owner
+                [[STANDARD_CONDITION_POP]]
+            ]
+            activation = Focus "FOCUS_RESEARCH"
+            stackinggroup = "COMPUTRONIUM_STACK"
+            effects = SetTargetResearch Value + Target.Population * [[PRODUCTION_PER_POP]]
+            
+            
+        [[CHANCE_OF_GUARD_1]]
+        
+    ]
+    graphic = "icons/specials_huge/computronium.png"
+
+Special
+    name = "ABANDONED_COLONY_SPECIAL"
+    description = "ABANDONED_COLONY_SPECIAL_DESC"
+    stealth = 20
+    spawnrate = 0.4
+    spawnlimit = 9999
+    location = And [
+        Planet
+        Not Planet type = [Asteroids GasGiant]
+        Not ContainedBy Contains Homeworld
+    ]
+    effectsgroups = [
+        EffectsGroup
+            scope = Source
+            activation = AND [
+                Planet
+                OwnedBy AnyEmpire
+                Construction low = 10
+            ] 
+            stackinggroup = "ABANDONED_STACK"
+            effects = RemoveSpecial "ABANDONED_COLONY_SPECIAL"
+            
+        EffectsGroup
+            scope = Source
+            activation = AND [
+                Planet
+                OwnedBy AnyEmpire
+            ]
+            stackinggroup = "ABANDONED_STACK"
+            effects = SetConstruction Value + 10
+        ]
+    graphic = "icons/specials_huge/abandoned-colony.png"
+
+Special
+    name = "GAIA_SPECIAL"
+    description = "GAIA_SPECIAL_DESC"
+    stealth = 5
+    spawnrate = 1.0
+    spawnlimit = 12
+    location = And [
+        Planet
+        Not Planet type = [Asteroids GasGiant]
+        Not ContainedBy Contains Capital
+    ]
+    effectsgroups = [
+        EffectsGroup
+            scope = Source
+            activation = AND [
+                Planet
+                Not Planet environment = Good
+                OwnedBy AnyEmpire
+                Random probability = 0.5
+            ]
+            effects = [
+                SetPlanetType Target.NextBetterPlanetType
+                GenerateSitRepMessage
+                    message = "EFFECT_GAIAN_TERRAFORM"
+                    parameters = [
+                        tag = "planet" data = Source.ID
+                    ]
+                    empire = Source.Owner
+            ]
+
+        EffectsGroup
+            scope = Source
+            activation = Planet environment = Good
+            effects = SetTargetPopulation Value + 3 * Target.SizeAsDouble
+
+        EffectsGroup     
+            scope = Source     
+            activation = AND [
+                Turn high = 0
+                Not WithinStarlaneJumps 4 Contains And [
+                    Planet
+                    OwnedBy AnyEmpire
+                ]
+            ]
+            stackinggroup = "GAIAN_STACK"
+            effects = CreateShip "SM_GUARD_3"
+
+        EffectsGroup     
+            scope = Source
+            activation = Turn high = 0
+            stackinggroup = "GAIAN_STACK"
+            effects = Destroy
+    ]
+    graphic = "icons/specials_huge/gaia.png"
+
+Special
+    name = "ANCIENT_RUINS_DEPLETED_SPECIAL"
+    description = "ANCIENT_RUINS_DEPLETED_SPECIAL_DESC"
+    stealth = 20
+    effectsgroups =
+        EffectsGroup
+            scope = Source
+            effects = SetTexture name = "planets/overlays/ruins.png"
+
+    graphic = "icons/specials_huge/ancient_ruins.png"
+    
+Special
+    name = "KRAKEN_NEST_SPECIAL"
+    description = "KRAKEN_NEST_SPECIAL_DESC"
+    effectsgroups = [
+        EffectsGroup
+            scope = Source
+            activation = AND [
+                Planet
+                OwnedBy AnyEmpire
+                OwnerHasTech "SHP_DOMESTIC_MONSTER"
+                Random probability = 0.05
+            ]
+            stackinggroup = "KRAKEN_NEST_STACK"
+            effects = [
+                CreateShip "SM_KRAKEN_1" Source.Owner
+                GenerateSitRepMessage
+                    message = "EFFECT_TAME_MONSTER_HATCHED"
+                    parameters = [
+                        tag = "planet" data = Source.ID
+                        tag = "predefinedshipdesign" data = "SM_KRAKEN_1"
+                    ]
+                    empire = Source.Owner
+            ]
+        EffectsGroup
+            scope = Source
+            activation = AND [
+                Planet
+                Not OwnedBy AnyEmpire
+                Random probability = 0.12
+            ]
+            stackinggroup = "KRAKEN_NEST_STACK"
+            effects = CreateShip "SM_KRAKEN_1"
+        ]
+    graphic = "icons/specials_huge/kraken-nest.png"
+    
+Special
+    name = "SNOWFLAKE_NEST_SPECIAL"
+    description = "SNOWFLAKE_NEST_SPECIAL_DESC"
+    effectsgroups = [
+        EffectsGroup
+            scope = Source
+            activation = AND [
+                Planet
+                OwnedBy AnyEmpire
+                OwnerHasTech "SHP_DOMESTIC_MONSTER"
+                Random probability = 0.08
+            ]
+            stackinggroup = "SNOWFLAKE_NEST_STACK"
+            effects = [
+                CreateShip "SM_SNOWFLAKE_1" Source.Owner
+                GenerateSitRepMessage
+                    message = "EFFECT_TAME_MONSTER_HATCHED"
+                    parameters = [
+                        tag = "planet" data = Source.ID
+                        tag = "predefinedshipdesign" data = "SM_SNOWFLAKE_1"
+                    ]
+                    empire = Source.Owner
+            ]
+        EffectsGroup
+            scope = Source
+            activation = AND [
+                Planet
+                Not OwnedBy AnyEmpire
+                Random probability = 0.12
+            ]
+            stackinggroup = "SNOWFLAKE_NEST_STACK"
+            effects = CreateShip "SM_SNOWFLAKE_1"
+        ]
+    graphic = "icons/specials_huge/snowflake-nest.png"
+    
+Special
+    name = "JUGGERNAUT_NEST_SPECIAL"
+    description = "JUGGERNAUT_NEST_SPECIAL_DESC"
+    effectsgroups = [
+        EffectsGroup
+            scope = Source
+            activation = AND [
+                Planet
+                OwnedBy AnyEmpire
+                OwnerHasTech "SHP_DOMESTIC_MONSTER"
+                Random probability = 0.06
+            ]
+            stackinggroup = "JUGGERNAUT_NEST_STACK"
+            effects = [
+                CreateShip "SM_JUGGERNAUT_1" Source.Owner
+                GenerateSitRepMessage
+                    message = "EFFECT_TAME_MONSTER_HATCHED"
+                    parameters = [
+                        tag = "planet" data = Source.ID
+                        tag = "predefinedshipdesign" data = "SM_JUGGERNAUT_1"
+                    ]
+                    empire = Source.Owner
+            ]
+        EffectsGroup
+            scope = Source
+            activation = AND [
+                Planet
+                Not OwnedBy AnyEmpire
+                Random probability = 0.12
+            ]
+            stackinggroup = "JUGGERNAUT_NEST_STACK"
+            effects = CreateShip "SM_JUGGERNAUT_1"
+        ]
+        
+    graphic = "icons/specials_huge/juggernaut-nest.png"
+
+Special
+    name = "CLOUD_COVER_MASTER_SPECIAL"
+    description = "CLOUD_COVER_MASTER_SPECIAL_DESC"
+    effectsgroups = [
+        [[STEALTH_BOOST_PLUS_PLUS]]
+        [[SYSTEM_STEALTH_PLUS_PLUS]]
+
+        EffectsGroup
+            scope = Source
+            stackinggroup = "STEALTH_SPECIAL_MASTER_STACK"
+            effects = AddSpecial "CLOUD_COVER_SLAVE_SPECIAL"
+    ]
+    graphic = "icons/specials_huge/cloud_cover.png"
+
+Special
+    name = "CLOUD_COVER_SLAVE_SPECIAL"
+    description = "CLOUD_COVER_SLAVE_SPECIAL_DESC"
+    effectsgroups = [
+        [[STEALTH_BOOST_LOW_NO_ORBITAL]]
+
+        EffectsGroup
+            scope = Source
+            activation = Not Or [
+                HasSpecial "CLOUD_COVER_MASTER_SPECIAL"
+                OwnerHasTech "SHP_EM_DAMPER"
+            ]
+            effects = RemoveSpecial "CLOUD_COVER_SLAVE_SPECIAL"
+
+        EffectsGroup
+            scope = And [
+                Contains Source
+                System
+            ]
+            activation = Not ContainedBy Contains Or [
+                HasSpecial "VOLCANIC_ASH_SLAVE_SPECIAL"
+                HasSpecial "DIM_RIFT_SLAVE_SPECIAL"
+                HasSpecial "VOID_SLAVE_SPECIAL"
+            ]
+            stackinggroup = "TECH_STEALTH_STACK"
+            effects = SetStealth Value + [[LOW_STEALTH]]
+
+        EffectsGroup
+            scope = Source
+            effects = SetTexture name = "planets/overlays/clouds.png" 
+    ]
+    graphic = "icons/specials_huge/cloud_cover.png"
+
+Special
+    name = "VOLCANIC_ASH_MASTER_SPECIAL"
+    description = "VOLCANIC_ASH_MASTER_SPECIAL_DESC"
+    effectsgroups = [
+        [[STEALTH_BOOST_PLUS_PLUS]]
+        [[SYSTEM_STEALTH_PLUS_PLUS]]
+
+        EffectsGroup
+            scope = Source
+            stackinggroup = "STEALTH_SPECIAL_MASTER_STACK"
+            effects = AddSpecial "VOLCANIC_ACTIVITY_SPECIAL"
+
+        [[REMOVE_CLOUD_COVER]]
+    ]
+    graphic = "icons/specials_huge/volcanic_ash.png"
+
+Special
+    name = "VOLCANIC_ACTIVITY_SPECIAL"
+    description = "VOLCANIC_ACTIVITY_SPECIAL"
+    effectsgroups =
+        EffectsGroup
+            scope = Source
+            activation = Not HasSpecial "VOLCANIC_ASH_MASTER_SPECIAL"
+            effects = RemoveSpecial "VOLCANIC_ACTIVITY_SPECIAL"
+    graphic = "icons/specials_huge/volcanic_ash.png"
+
+Special
+    name = "VOLCANIC_ASH_SLAVE_SPECIAL"
+    description = "VOLCANIC_ASH_SLAVE_SPECIAL_DESC"
+    effectsgroups = [
+        [[STEALTH_BOOST_MEDIUM_NO_ORBITAL]]
+
+        EffectsGroup
+            scope = Source
+            activation = Not Or [
+                HasSpecial "VOLCANIC_ACTIVITY_SPECIAL"
+                OwnerHasTech "SHP_ABSORPTION_FIELD"
+            ]
+            effects = RemoveSpecial "VOLCANIC_ASH_SLAVE_SPECIAL"
+
+        EffectsGroup
+            scope = And [
+                Contains Source
+                System
+            ]
+            activation = Not ContainedBy Contains Or [
+                HasSpecial "DIM_RIFT_SLAVE_SPECIAL"
+                HasSpecial "VOID_SLAVE_SPECIAL"
+            ]
+            stackinggroup = "TECH_STEALTH_STACK"
+            effects = SetStealth Value + [[MEDIUM_STEALTH]]
+
+        EffectsGroup
+            scope = Source
+            effects = SetTexture name = "planets/overlays/ash.png" 
+    ]
+    graphic = "icons/specials_huge/volcanic_ash.png"
+
+Special
+    name = "DIM_RIFT_MASTER_SPECIAL"
+    description = "DIM_RIFT_MASTER_SPECIAL_DESC"
+    effectsgroups = [
+        [[STEALTH_BOOST_PLUS_PLUS]]
+        [[SYSTEM_STEALTH_PLUS_PLUS]]
+
+        EffectsGroup
+            scope = Source
+            stackinggroup = "STEALTH_SPECIAL_MASTER_STACK"
+            effects = [
+                AddSpecial "DIM_RIFT_SLAVE_SPECIAL"
+                SetTargetPopulation Value - 4
+            ]
+
+        [[REMOVE_CLOUD_COVER]]
+        [[REMOVE_ASH]]
+    ]
+    graphic = "icons/specials_huge/dim_rift.png"
+
+Special
+    name = "DIM_RIFT_SLAVE_SPECIAL"
+    description = "DIM_RIFT_SLAVE_SPECIAL_DESC"
+    effectsgroups = [
+        [[STEALTH_BOOST_HIGH_NO_ORBITAL]]
+
+        EffectsGroup
+            scope = Source
+            activation = Not Or [
+                HasSpecial "DIM_RIFT_MASTER_SPECIAL"
+                OwnerHasTech "SHP_DIM_CLOAK"
+            ]
+            effects = RemoveSpecial "DIM_RIFT_SLAVE_SPECIAL"
+
+        EffectsGroup
+            scope = And [
+                Contains Source
+                System
+            ]
+            activation = Not ContainedBy Contains HasSpecial "VOID_SLAVE_SPECIAL"
+            effects = SetStealth Value + [[HIGH_STEALTH]]
+
+        EffectsGroup
+            scope = Source
+            effects = SetTexture name = "planets/overlays/rift.png" 
+    ]
+    graphic = "icons/specials_huge/dim_rift.png"
+
+Special
+    name = "VOID_MASTER_SPECIAL"
+    description = "VOID_MASTER_SPECIAL_DESC"
+    effectsgroups = [
+        [[STEALTH_BOOST_PLUS_PLUS]]
+        [[SYSTEM_STEALTH_PLUS_PLUS]]
+
+        EffectsGroup
+            scope = Source
+            stackinggroup = "STEALTH_SPECIAL_MASTER_STACK"
+            effects = AddSpecial "VOID_SLAVE_SPECIAL"
+
+        [[REMOVE_CLOUD_COVER]]
+        [[REMOVE_ASH]]
+        [[REMOVE_DIM]]
+    ]
+    graphic = "icons/specials_huge/void.png"
+
+Special
+    name = "VOID_SLAVE_SPECIAL"
+    description = "VOID_SLAVE_SPECIAL_DESC"
+    effectsgroups = [
+        [[STEALTH_BOOST_ULTIMATE_NO_ORBITAL]]
+
+        EffectsGroup
+            scope = Source
+            activation = And [
+                Not HasSpecial "VOID_MASTER_SPECIAL"
+                Not OwnerHasTech "SHP_PHASING_CLOAK"
+            ]
+            effects = RemoveSpecial "VOID_SLAVE_SPECIAL"
+
+        EffectsGroup
+            scope = And [
+                Contains Source
+                System
+            ]
+            stackinggroup = "TECH_STEALTH_STACK"
+            effects = SetStealth Value + [[VERY_HIGH_STEALTH]]
+    ]
+    graphic = "icons/specials_huge/void.png"
+
+Special
+    name = "DERELICT_SPECIAL2"               //  MAP / DETECTION
+    description = "DERELICT_SPECIAL_DESC"
+    spawnrate = 0.5
+    spawnlimit = 100
+    location = And [
+        System
+        Not Contains Capital
+    ]
+    effectsgroups = [
+        EffectsGroup
+            scope = NumberOf 1 And [
+                Ship
+                ContainedBy Source
+                OwnedBy AnyEmpire
+            ]
+            activation = And [
+                System
+                Contains And [
+                    Ship
+                    OwnedBy AnyEmpire
+                ]
+            ]
+            effects = [
+                AddSpecial "DERELICT_SPECIAL2"
+                GenerateSitRepMessage
+                    message = "EFFECT_DERELICT_MAP"
+                    parameters = [
+                        tag = "system" data = Source.ID
+                    ]
+                    affiliation = TheEmpire
+                    empire = Target.Owner
+            ]
+
+        EffectsGroup
+            scope = And [
+                Source
+                System
+            ]
+            activation = And [
+                System
+                Contains And [
+                    Ship
+                    OwnedBy AnyEmpire
+                ]
+            ]
+            effects = [
+                RemoveSpecial "DERELICT_SPECIAL2"
+            ]
+
+        EffectsGroup
+            scope = And [
+                Source
+                Ship
+            ]
+            effects = [
+                SetDetection Value + 100
+                RemoveSpecial "DERELICT_SPECIAL2"
+            ]
+    ]
+    graphic = "icons/specials_huge/derelict.png"
+
+Special
+    name = "DERELICT_SPECIAL3"               //  FUEL
+    description = "DERELICT_SPECIAL_DESC"
+    spawnrate = 0.5
+    spawnlimit = 100
+    location = And [
+        System
+        Not Contains Capital
+    ]
+    effectsgroups = [
+        EffectsGroup
+            scope = And [
+                Ship
+                ContainedBy Source
+                OwnedBy AnyEmpire
+            ]
+            activation = And [
+                System
+                Contains And [
+                    Ship
+                    OwnedBy AnyEmpire
+                ]
+            ]
+            effects = [
+                AddSpecial "DERELICT_SPECIAL3"
+                GenerateSitRepMessage
+                    message = "EFFECT_DERELICT_FUEL"
+                    parameters = [
+                        tag = "system" data = Source.ID
+                    ]
+                    affiliation = TheEmpire
+                    empire = Target.Owner
+            ]
+
+        EffectsGroup
+            scope = And [
+                Source
+                System
+            ]
+            activation = And [
+                System
+                Contains And [
+                    Ship
+                    OwnedBy AnyEmpire
+                ]
+            ]
+            effects = [
+                RemoveSpecial "DERELICT_SPECIAL3"
+            ]
+
+        EffectsGroup
+            scope = And [
+                Source
+                Ship
+            ]
+            effects = [
+                SetFuel Value + 100
+                RemoveSpecial "DERELICT_SPECIAL3"
+            ]
+    ]
+    graphic = "icons/specials_huge/derelict.png"
+
+Special
+    name = "SUPERNOVA_SPECIAL"
+    description = "SUPERNOVA_SPECIAL_DESC"
+    spawnrate = 0
+    spawnlimit = 0
+    effectsgroups =
+        EffectsGroup
+            scope = Source
+            effects = [
+                SetOverlayTexture name = "stars/nova-boom3.png" size = 100
+                RemoveSpecial "NOVA_BOMB_ACTIVATOR_SPECIAL"
+            ]
+    graphic = ""
+
+Special
+    name = "NOVA_BOMB_ACTIVATOR_SPECIAL"
+    description = "NOVA_BOMB_ACTIVATOR_SPECIAL_DESC"
+    spawnrate = 0
+    spawnlimit = 0
+    graphic = ""
+
+Special
+    name = "EXPERIMENTOR_OUTPOST_SPECIAL"
+    description = "EXPERIMENTOR_OUTPOST_SPECIAL_DESC"
+    spawnrate = 0
+    spawnlimit = 0
+    effectsgroups = [
+        EffectsGroup
+            scope = Source
+            activation = Contains And [
+                OwnedBy AnyEmpire
+                Species "SP_EXPERIMENTOR"
+            ]
+            stackinggroup = "VICTORY_SITREP"
+            effects = [
+                RemoveSpecial "EXPERIMENTOR_OUTPOST_SPECIAL"
+                GenerateSitRepMessage
+                    message = "SITREP_VICTORY_CAPTURE"
+            ]
+
+        EffectsGroup
+            scope = Source
+            activation = Not Contains Building "BLD_EXPERIMENTOR_OUTPOST"
+            stackinggroup = "VICTORY_SITREP"
+            effects = [
+                RemoveSpecial "EXPERIMENTOR_OUTPOST_SPECIAL"
+                GenerateSitRepMessage
+                    message = "SITREP_VICTORY_DESTRUCTION"
+            ]
+
+        EffectsGroup
+            scope = Source
+            activation = Not Contains Species "SP_EXPERIMENTOR"
+            stackinggroup = "VICTORY_SITREP"
+            effects = [
+                RemoveSpecial "EXPERIMENTOR_OUTPOST_SPECIAL"
+                GenerateSitRepMessage
+                    message = "SITREP_VICTORY_BIO"
+            ]
+    ]
+    graphic = ""
+    
+Special
+    name = "PROBIOTIC_SPECIAL"
+    description = "PROBIOTIC_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 9.0
+    spawnlimit = 8
+    location = And [
+        Planet
+        Planet type = [Ocean Swamp Toxic]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 1 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [       
+        EffectsGroup
+            scope = And [
+                Planet
+                OwnedBy TheEmpire Source.Owner
+                HasTag "ORGANIC"
+                ResourceSupplyConnected empire = Source.Owner condition = Source
+            ]
+            activation =  Focus "FOCUS_GROWTH"
+            stackinggroup = "PROBIOTIC_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble
+            
+        EffectsGroup
+            scope = And [
+                Source
+                HasTag "ORGANIC"
+            ]
+            stackinggroup = "PROBIOTIC_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble  // Provides the bonus locally, no matter the focus
+            
+           [[CHANCE_OF_GUARD_1]]
+
+    ]
+    graphic = "icons/specials_huge/probiotic.png"
+    
+Special
+    name = "FRUIT_SPECIAL"
+    description = "FRUIT_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 9.0
+    spawnlimit = 8
+    location = And [
+        Planet
+        Planet type = [Desert Terran Ocean Swamp]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 1 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [       
+        EffectsGroup
+            scope = And [
+                Planet
+                OwnedBy TheEmpire Source.Owner
+                HasTag "ORGANIC"
+                ResourceSupplyConnected empire = Source.Owner condition = Source
+            ]
+            activation =  Focus "FOCUS_GROWTH"
+            stackinggroup = "FRUIT_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble
+            
+        EffectsGroup
+            scope = And [
+                Source
+                HasTag "ORGANIC"
+            ]
+            stackinggroup = "FRUIT_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble  // Provides the bonus locally, no matter the focus
+            
+           [[CHANCE_OF_GUARD_1]]
+    ]
+    graphic = "icons/specials_huge/fruit.png"
+
+Special
+    name = "SPICE_SPECIAL"
+    description = "SPICE_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 9.0
+    spawnlimit = 8
+    location = And [
+        Planet
+        Planet type = [Tundra Desert Terran]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 1 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [       
+        EffectsGroup
+            scope = And [
+                Planet
+                OwnedBy TheEmpire Source.Owner
+                HasTag "ORGANIC"
+                ResourceSupplyConnected empire = Source.Owner condition = Source
+            ]
+            activation =  Focus "FOCUS_GROWTH"
+            stackinggroup = "SPICE_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble
+            
+        EffectsGroup
+            scope = And [
+                Source
+                HasTag "ORGANIC"
+            ]
+            stackinggroup = "SPICE_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble  // Provides the bonus locally, no matter the focus
+            
+           [[CHANCE_OF_GUARD_1]]
+    ]
+    graphic = "icons/specials_huge/spice.png"
+
+Special
+    name = "MONOPOLE_SPECIAL"
+    description = "MONOPOLE_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 9.0
+    spawnlimit = 8
+    location = And [
+        Planet
+        Planet type = [Radiated Barren Inferno]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 1 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [
+        [[STANDARD_INDUSTRY_BOOST]]
+        
+        EffectsGroup
+            scope = And [
+                Planet
+                OwnedBy TheEmpire Source.Owner
+                HasTag "ROBOTIC"
+                ResourceSupplyConnected empire = Source.Owner condition = Source
+            ]
+            activation =  Focus "FOCUS_GROWTH"
+            stackinggroup = "MONOPOLE_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble
+            
+        EffectsGroup
+            scope = And [
+                Source
+                HasTag "ROBOTIC"
+            ]
+            stackinggroup = "MONOPOLE_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble  // Provides the bonus locally, no matter the focus
+            
+           [[CHANCE_OF_GUARD_1]]
+    ]
+    graphic = "icons/specials_huge/monopole.png"
+
+Special
+    name = "SUPERCONDUCTOR_SPECIAL"
+    description = "SUPERCONDUCTOR_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 9.0
+    spawnlimit = 8
+    location = And [
+        Planet
+        Planet type = [Radiated Barren Inferno]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 1 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [
+        [[STANDARD_INDUSTRY_BOOST]]
+        
+        EffectsGroup
+            scope = And [
+                Planet
+                OwnedBy TheEmpire Source.Owner
+                HasTag "ROBOTIC"
+                ResourceSupplyConnected empire = Source.Owner condition = Source
+            ]
+            activation =  Focus "FOCUS_GROWTH"
+            stackinggroup = "SUPERCONDUCTOR_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble
+            
+        EffectsGroup
+            scope = And [
+                Source
+                HasTag "ROBOTIC"
+            ]
+            stackinggroup = "SUPERCONDUCTOR_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble  // Provides the bonus locally, no matter the focus
+            
+           [[CHANCE_OF_GUARD_1]]
+
+    ]
+    graphic = "icons/specials_huge/superconductor.png"
+
+Special
+    name = "POSITRONIUM_SPECIAL"
+    description = "POSITRONIUM_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 9.0
+    spawnlimit = 8
+    location = And [
+        Planet
+        Planet type = [Radiated Barren Inferno]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 1 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [
+        [[STANDARD_INDUSTRY_BOOST]]
+        
+        EffectsGroup
+            scope = And [
+                Planet
+                OwnedBy TheEmpire Source.Owner
+                HasTag "ROBOTIC"
+                ResourceSupplyConnected empire = Source.Owner condition = Source
+            ]
+            activation =  Focus "FOCUS_GROWTH"
+            stackinggroup = "POSITRONIUM_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble
+            
+        EffectsGroup
+            scope = And [
+                Source
+                HasTag "ROBOTIC"
+            ]
+            stackinggroup = "POSITRONIUM_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble  // Provides the bonus locally, no matter the focus
+            
+           [[CHANCE_OF_GUARD_1]]
+
+    ]
+    graphic = "icons/specials_huge/positronium.png"
+
+Special
+    name = "MINERALS_SPECIAL"
+    description = "MINERALS_SPECIAL_DESC"
+    stealth = 20
+    spawnrate = 1.0
+    spawnlimit = 8
+    location = And [
+        Planet
+        Not Planet type = [Asteroids GasGiant]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 1 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [
+        [[STANDARD_MINERAL_BOOST]]
+
+        EffectsGroup
+            scope = And [
+                Planet
+                OwnedBy TheEmpire Source.Owner
+                HasTag "LITHIC"
+                ResourceSupplyConnected empire = Source.Owner condition = Source
+            ]
+            activation =  Focus "FOCUS_GROWTH"
+            stackinggroup = "MINERALS_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble
+            
+        EffectsGroup
+            scope = And [
+                Source
+                HasTag "LITHIC"
+            ]
+            stackinggroup = "MINERALS_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble  // Provides the bonus locally, no matter the focus
+            
+           [[CHANCE_OF_GUARD_1]]
+    ]
+    graphic = "icons/specials_huge/minerals.png"
+
+Special
+    name = "CRYSTALS_SPECIAL"
+    description = "CRYSTALS_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 1.0
+    spawnlimit = 8
+    location = And [
+        Planet
+        Not Planet type = [GasGiant]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 1 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [
+        [[STANDARD_MINERAL_BOOST]]
+
+        EffectsGroup
+            scope = And [
+                Planet
+                OwnedBy TheEmpire Source.Owner
+                HasTag "LITHIC"
+                ResourceSupplyConnected empire = Source.Owner condition = Source
+            ]
+            activation =  Focus "FOCUS_GROWTH"
+            stackinggroup = "CRYSTALS_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble
+            
+        EffectsGroup
+            scope = And [
+                Source
+                HasTag "LITHIC"
+            ]
+            stackinggroup = "CRYSTALS_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble  // Provides the bonus locally, no matter the focus
+            
+           [[CHANCE_OF_GUARD_1]]
+
+    ]
+    graphic = "icons/specials_huge/crystals.png"
+
+Special
+    name = "METALOIDS_SPECIAL"
+    description = "METALOIDS_SPECIAL_DESC"
+    stealth = 0
+    spawnrate = 1.0
+    spawnlimit = 8
+    location = And [
+        Planet
+        Not Planet type = [Asteroids GasGiant]
+        Not ContainedBy Contains Capital
+        Not WithinStarlaneJumps 1 Contains And [
+            Planet
+            OwnedBy AnyEmpire
+        ]
+    ]
+    effectsgroups = [
+        [[STANDARD_MINERAL_BOOST]]
+
+        EffectsGroup
+            scope = And [
+                Planet
+                OwnedBy TheEmpire Source.Owner
+                HasTag "LITHIC"
+                ResourceSupplyConnected empire = Source.Owner condition = Source
+            ]
+            activation =  Focus "FOCUS_GROWTH"
+            stackinggroup = "METALOIDS_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble
+            
+        EffectsGroup
+            scope = And [
+                Source
+                HasTag "LITHIC"
+            ]
+            stackinggroup = "METALOIDS_STACK"
+            effects = SetTargetPopulation Value + 1 * Target.SizeAsDouble  // Provides the bonus locally, no matter the focus
+            
+           [[CHANCE_OF_GUARD_1]]
+
+    ]
+    graphic = "icons/specials_huge/metaloids.png"
+
+
+//##########################################################
+//###                     M A C R O S                    ###
+//##########################################################
+
+
+STANDARD_MINERAL_BOOST
+'''EffectsGroup
+            scope = Source
+            activation = And [
+                Focus "FOCUS_MINING"
+                [[STANDARD_CONDITION_INFRA]]
+            ]
+            effects = SetTargetIndustry Value + Target.Construction * [[PRODUCTION_PER_INFRA]]
+
+        EffectsGroup
+            scope = Source
+            activation = And [
+                Focus "FOCUS_MINING"
+                [[STANDARD_CONDITION_POP]]
+            ]
+            effects = SetTargetIndustry Value + Target.Population * [[PRODUCTION_PER_POP]]
+
+        EffectsGroup
+            scope = Source
+            activation = And [
+                Focus "FOCUS_HEAVY_MINING"
+                [[STANDARD_CONDITION_INFRA]]
+            ]
+            effects = SetTargetIndustry Value + Target.Construction * 4 * [[PRODUCTION_PER_INFRA]]
+
+        EffectsGroup
+            scope = Source
+            activation = And [
+                Focus "FOCUS_HEAVY_MINING"
+                [[STANDARD_CONDITION_POP]]
+            ]
+            effects = SetTargetIndustry Value + Target.Population * 4 * [[PRODUCTION_PER_POP]]
+'''
+
+STANDARD_INDUSTRY_BOOST
+'''EffectsGroup
+            scope = Source
+            activation = And [
+                Focus "FOCUS_INDUSTRY"
+                [[STANDARD_CONDITION_INFRA]]
+            ]
+            effects = SetTargetIndustry Value + Target.Construction * [[PRODUCTION_PER_INFRA]]
+
+        EffectsGroup
+            scope = Source
+            activation = And [
+                Focus "FOCUS_INDUSTRY"
+                [[STANDARD_CONDITION_POP]]
+            ]
+            effects = SetTargetIndustry Value + Target.Population * [[PRODUCTION_PER_POP]]
+
+'''
+
+
+REMOVE_CLOUD_COVER
+'''EffectsGroup
+        scope = Source
+        activation = Source
+        effects = RemoveSpecial "CLOUD_COVER_MASTER_SPECIAL"
+'''
+
+REMOVE_ASH
+'''EffectsGroup
+        scope = Source
+        activation = Source
+        effects = RemoveSpecial "VOLCANIC_ASH_MASTER_SPECIAL"
+'''
+
+REMOVE_DIM
+'''EffectsGroup
+        scope = Source
+        activation = Source
+        effects = RemoveSpecial "DIM_RIFT_MASTER_SPECIAL"
+'''
+
+REMOVE_VOID
+'''EffectsGroup
+        scope = Source
+        activation = Source
+        effects = RemoveSpecial "VOID_MASTER_SPECIAL"
+'''
+
+CHANCE_OF_GUARD_1
+'''        EffectsGroup     
+            scope = Source     
+            activation = AND [
+                Turn high = 0
+                Random probability = 0.7
+            ]
+            effects = CreateShip "SM_GUARD_1"
+'''

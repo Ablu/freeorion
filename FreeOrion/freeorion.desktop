@@ -1,9 +1,13 @@
 [Desktop Entry]
+Version=1.0
 Name=FreeOrion
-GenericName=FreeOrion
-Comment=Run the FreeOrion client
+GenericName=Turn-based space game
+Comment=The FreeOrion client
+Comment[de]=Der FreeOrion Client
 Exec=freeorion
+TryExec=freeorion
 Icon=freeorion
+StartupNotify=false
 Terminal=true
 Type=Application
 Categories=Game;StrategyGame;
